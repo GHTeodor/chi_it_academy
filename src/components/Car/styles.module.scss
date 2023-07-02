@@ -1,0 +1,27 @@
+.car {
+  width: 100%;
+}
+
+.car > td {
+  padding-left: 7px;
+  padding-right: 7px;
+  border: double medium gray;
+
+  &.click:hover, .click:hover {
+    text-decoration: underline;
+    color: #2196f3;
+  }
+
+  &.click:hover, .click:active {
+    cursor: grab;
+  }
+}
+
+@media screen and (max-width: 662px) {
+  .car > td {
+    padding: {
+      left: 0;
+      right: 0;
+    }
+  }
+}
