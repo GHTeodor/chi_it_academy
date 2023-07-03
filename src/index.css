@@ -35,11 +35,6 @@ html::-webkit-scrollbar-thumb {
 @media screen and (max-width: 822px) {
     * {
         font-family: 'PT Sans', sans-serif;
-    }
-}
-
-@media screen and (max-width: 822px) {
-    * {
         font-size: small;
     }
 }
