@@ -6,13 +6,16 @@ import styles from "./styles.module.scss";
 import {ICar} from "../../../interfaces";
 import {createValidator} from "../../../validators";
 import {localStorageService} from "../../../services";
+import {useAppReducer} from "../../../hooks";
+import {carActions} from "../../../reducers";
 
 interface IProps {
     setClose: React.Dispatch<React.SetStateAction<boolean>>;
-    setAddedCars: React.Dispatch<React.SetStateAction<ICar[]>>;
 }
 
-const Create: FC<IProps> = ({setClose, setAddedCars}) => {
+const Create: FC<IProps> = ({setClose}) => {
+    const {dispatch} = useAppReducer();
+
     const {reset, handleSubmit, register, formState: {isValid, errors}} = useForm<ICar>({
         mode: "all",
         resolver: joiResolver(createValidator),
@@ -22,7 +25,7 @@ const Create: FC<IProps> = ({setClose, setAddedCars}) => {
         car.id = new Date().getMilliseconds() + Math.random();
         car.price = "$" + (+car.price).toFixed(2);
         localStorageService.addCar(car);
-        setAddedCars(localStorageService.getAddedCars());
+        dispatch(carActions.setAddedCars(localStorageService.getAddedCars()));
 
         reset();
         setClose(prev => !prev);

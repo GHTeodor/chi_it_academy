@@ -1,10 +1,8 @@
 import React, {ChangeEvent, FC, useState} from 'react';
 
-import {Cars} from "../components";
-import {ICar} from "../interfaces";
-import {Create} from "../components/Modal_Window";
-import {localStorageService} from "../services";
 import styles from "./styles.module.scss";
+import {Cars} from "../components";
+import {Create} from "../components/Modal_Window";
 
 interface IProps {
 }
@@ -12,7 +10,6 @@ interface IProps {
 const CarsPaginationPage: FC<IProps> = () => {
     const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
     const [page, setPage] = useState<number>(0);
-    const [addedCars, setAddedCars] = useState<ICar[]>(localStorageService.getAddedCars());
     const [limit, setLimit] = useState<number>(24);
     const [maxPage, setMaxPage] = useState<number>(1000);
 
@@ -88,10 +85,10 @@ const CarsPaginationPage: FC<IProps> = () => {
             <hr/>
 
             <>
-                {openCreateModal && <Create setAddedCars={setAddedCars} setClose={setOpenCreateModal}/>}
+                {openCreateModal && <Create setClose={setOpenCreateModal}/>}
             </>
 
-            <Cars page={page} limit={limit} addedCars={addedCars} setPage={setPage} setMaxPage={setMaxPage}/>
+            <Cars page={page} limit={limit} setPage={setPage} setMaxPage={setMaxPage}/>
         </div>
     );
 };

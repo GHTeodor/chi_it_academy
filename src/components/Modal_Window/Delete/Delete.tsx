@@ -2,18 +2,21 @@ import React, {FC, RefObject} from 'react';
 
 import styles from './styles.module.scss';
 import {localStorageService} from "../../../services";
+import {useAppReducer} from "../../../hooks";
+import {carActions} from "../../../reducers";
 
 interface IProps {
     selectRef: RefObject<HTMLSelectElement>;
     id: number;
     setClose: React.Dispatch<React.SetStateAction<boolean>>;
-    setRemovedCars: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-const Delete: FC<IProps> = ({id, setRemovedCars, setClose, selectRef}) => {
+const Delete: FC<IProps> = ({id, setClose, selectRef}) => {
+    const {dispatch} = useAppReducer();
+
     const deleteCar = (id: number): void => {
         localStorageService.addIDToRemovedCarsList(id);
-        setRemovedCars(localStorageService.getRemovedCarsIDList());
+        dispatch(carActions.setRemovedCars(localStorageService.getRemovedCarsIDList()));
     };
 
     const yes = () => {

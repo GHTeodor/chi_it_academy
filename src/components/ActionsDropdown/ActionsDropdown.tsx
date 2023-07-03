@@ -1,15 +1,13 @@
 import React, {FC, useRef, useState} from 'react';
 
-import {ICar, ICarForUpdate} from "../../interfaces";
+import {ICar} from "../../interfaces";
 import {Delete, Edit} from "../Modal_Window";
 
 interface IProps {
     car: ICar;
-    setRemovedCars: React.Dispatch<React.SetStateAction<number[]>>;
-    setEditedCars: React.Dispatch<React.SetStateAction<ICarForUpdate[]>>;
 }
 
-const ActionsDropdown: FC<IProps> = ({setEditedCars, setRemovedCars, car}) => {
+const ActionsDropdown: FC<IProps> = ({car}) => {
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
     const [openEditModal, setOpenEditModal] = useState<boolean>(false);
 
@@ -27,10 +25,8 @@ const ActionsDropdown: FC<IProps> = ({setEditedCars, setRemovedCars, car}) => {
 
     return (
         <td>
-            {openDeleteModal && <Delete setRemovedCars={setRemovedCars} setClose={setOpenDeleteModal} id={car.id}
-                                        selectRef={selectRef}/>}
-            {openEditModal &&
-                <Edit setEditedCars={setEditedCars} setClose={setOpenEditModal} car={car} selectRef={selectRef}/>}
+            {openDeleteModal && <Delete setClose={setOpenDeleteModal} id={car.id} selectRef={selectRef}/>}
+            {openEditModal && <Edit setClose={setOpenEditModal} car={car} selectRef={selectRef}/>}
 
             <select ref={selectRef} defaultValue="" onChange={handleSelect}>
                 <option value="edit">

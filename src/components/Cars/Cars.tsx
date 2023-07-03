@@ -1,37 +1,44 @@
 import React, {FC, useEffect, useState} from 'react';
 
-import {carService, localStorageService} from "../../services";
-import {Car} from "../Car/Car";
-import {ICar, ICarForUpdate} from "../../interfaces";
 import styles from './styles.module.scss';
+import {carService} from "../../services";
+import {Car} from "../Car/Car";
+import {ICar} from "../../interfaces";
+import {useAppReducer} from "../../hooks";
+import {carActions} from "../../reducers";
 
 interface IProps {
-    addedCars: ICar[];
     page: number;
     limit: number;
     setPage: React.Dispatch<React.SetStateAction<number>>;
     setMaxPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Cars: FC<IProps> = ({page, limit, addedCars, setPage, setMaxPage}) => {
-    const [cars, setCars] = useState<ICar[]>([]);
-    const [fullCarsLength, setFullCarsLength] = useState<number>(0);
-    const [removedCars, setRemovedCars] = useState<number[]>(localStorageService.getRemovedCarsIDList());
-    const [editedCars, setEditedCars] = useState<ICarForUpdate[]>(localStorageService.getEditedCarsFieldsList());
+const Cars: FC<IProps> = ({page, limit, setPage, setMaxPage}) => {
+    const {
+        state: {
+            cars,
 
-    //
-    const [carsByCompanyName, setCarsByCompanyName] = useState<ICar[]>([]);
-    const [carsByModel, setCarsByModel] = useState<ICar[]>([]);
-    const [carsByColor, setCarsByColor] = useState<ICar[]>([]);
-    const [carsByYear, setCarsByYear] = useState<ICar[]>([]);
-    const [carsByYearLT, setCarsByYearLT] = useState<ICar[]>([]);
-    const [carsByYearGT, setCarsByYearGT] = useState<ICar[]>([]);
-    //
+            addedCars,
+
+            editedCars,
+            removedCars,
+
+            carsByCompanyName,
+            carsByModel,
+            carsByColor,
+            carsByYear,
+            carsByYearLT,
+            carsByYearGT,
+        }, dispatch
+    } = useAppReducer();
+
+    const [fullCarsLength, setFullCarsLength] = useState<number>(0);
 
     const carsData = async () => {
         const {data} = await carService.getAll();
 
-        let cars = addedCars.length ? [...addedCars, ...data.cars] : data.cars;
+        let cars: ICar[] = addedCars.length ? [...addedCars, ...data.cars] : data.cars;
 
         cars = findBy(cars);
 
@@ -45,7 +52,7 @@ const Cars: FC<IProps> = ({page, limit, addedCars, setPage, setMaxPage}) => {
         setFullCarsLength(cars.length);
         setMaxPage(cars.length - 1);
 
-        setCars(paginatedCars(cars));
+        dispatch(carActions.setAll(paginatedCars(cars)));
     };
 
     const findBy = (cars: ICar[]) => {
@@ -92,7 +99,13 @@ const Cars: FC<IProps> = ({page, limit, addedCars, setPage, setMaxPage}) => {
 
     useEffect(() => {
         carsData();
-    }, [page, limit, addedCars, removedCars, editedCars,
+    }, [
+        page,
+        limit,
+        addedCars,
+        removedCars,
+        editedCars,
+
         carsByCompanyName,
         carsByModel,
         carsByColor,
@@ -132,22 +145,9 @@ const Cars: FC<IProps> = ({page, limit, addedCars, setPage, setMaxPage}) => {
                         <tbody>
                         {
                             cars.map((car: ICar) =>
-                                <Car
-                                    key={car.id}
-                                    car={car}
-                                    setRemovedCars={setRemovedCars}
-                                    setEditedCars={setEditedCars}
-
-                                    //
-                                    fullEditedCarsList={editedCarsListWithFullFields(cars)}
-
-                                    setCarsByCompanyName={setCarsByCompanyName}
-                                    setCarsByModel={setCarsByModel}
-                                    setCarsByColor={setCarsByColor}
-                                    setCarsByYear={setCarsByYear}
-                                    setCarsByYearLT={setCarsByYearLT}
-                                    setCarsByYearGT={setCarsByYearGT}
-                                    //
+                                <Car key={car.id}
+                                     car={car}
+                                     fullEditedCarsList={editedCarsListWithFullFields(cars)}
                                 />
                             )
                         }

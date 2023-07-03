@@ -2,45 +2,44 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
 
 * {
-  margin: 0;
-  padding: 0;
-  font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
 }
 
 body {
-  background:
-          linear-gradient(217deg, rgba(232, 192, 192, 0.8), rgba(255, 0, 0, 0) 70.71%),
-          linear-gradient(127deg, rgba(198, 227, 198, 0.8), rgba(0, 255, 0, 0) 70.71%),
-          linear-gradient(336deg, rgba(199, 199, 236, 0.8), rgba(0, 0, 255, 0) 70.71%);
+    background: linear-gradient(217deg, rgba(232, 192, 192, 0.8), rgba(255, 0, 0, 0) 70.71%),
+    linear-gradient(127deg, rgba(198, 227, 198, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(199, 199, 236, 0.8), rgba(0, 0, 255, 0) 70.71%);
 }
 
 html::-webkit-scrollbar {
-  width: 20px;
+    width: 20px;
 }
 
 html::-webkit-scrollbar-track {
-  border-radius: 8px;
-  background-image: url("./assets/scrollbar_tracks.png");
-  background-position: -5px;
-  background-repeat: repeat-y;
-  background-size: 50px;
+    border-radius: 8px;
+    background-image: url("./assets/scrollbar_tracks.png");
+    background-position: -5px;
+    background-repeat: repeat-y;
+    background-size: 50px;
 }
 
 html::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background-image: url("./assets/scrollbar_train.png");
-  background-position:center center;
-  background-repeat: no-repeat;
+    border-radius: 8px;
+    background-image: url("./assets/scrollbar_train.png");
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 @media screen and (max-width: 822px) {
-  * {
-    font-family: 'PT Sans', sans-serif;
-  }
+    * {
+        font-family: 'PT Sans', sans-serif;
+    }
 }
 
 @media screen and (max-width: 822px) {
-  * {
-    font-size: small;
-  }
+    * {
+        font-size: small;
+    }
 }

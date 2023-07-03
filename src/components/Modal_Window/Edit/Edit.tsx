@@ -1,19 +1,21 @@
 import React, {FC, RefObject} from 'react';
 import {SubmitHandler, useForm} from "react-hook-form";
 
-import {ICar, ICarForUpdate} from "../../../interfaces";
 import styles from "./styles.module.scss";
+import {ICar} from "../../../interfaces";
 import {localStorageService} from "../../../services";
+import {useAppReducer} from "../../../hooks";
+import {carActions} from "../../../reducers";
 
 interface IProps {
     selectRef: RefObject<HTMLSelectElement>;
-    setEditedCars: React.Dispatch<React.SetStateAction<ICarForUpdate[]>>;
     setClose: React.Dispatch<React.SetStateAction<boolean>>;
     car: ICar;
 
 }
 
-const Edit: FC<IProps> = ({setEditedCars, car, setClose, selectRef}) => {
+const Edit: FC<IProps> = ({car, setClose, selectRef}) => {
+    const {dispatch} = useAppReducer();
     const {reset, handleSubmit, register, formState: {isValid, errors}} = useForm<ICar>();
 
     const edit: SubmitHandler<ICar> = (editedCar: ICar): void => {
@@ -32,7 +34,7 @@ const Edit: FC<IProps> = ({setEditedCars, car, setClose, selectRef}) => {
                 price: "$" + (+editedCar.price).toFixed(2),
                 availability: editedCar.availability
             });
-            setEditedCars(localStorageService.getEditedCarsFieldsList());
+            dispatch(carActions.setEditedCars(localStorageService.getEditedCarsFieldsList()));
         }
 
         reset();

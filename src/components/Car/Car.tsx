@@ -1,45 +1,19 @@
 import React, {FC} from 'react';
+import {AxiosError} from "axios";
 
-import {ICar, ICarForUpdate} from "../../interfaces";
 import styles from './styles.module.scss';
+import {ICar} from "../../interfaces";
 import {ActionsDropdown} from "../ActionsDropdown/ActionsDropdown";
 import {carService, localStorageService} from "../../services";
-import {AxiosError} from "axios";
+import {useAppReducer} from "../../hooks";
+import {carActions} from "../../reducers";
 
 interface IProps {
     car: ICar;
-    setRemovedCars: React.Dispatch<React.SetStateAction<number[]>>;
-    setEditedCars: React.Dispatch<React.SetStateAction<ICarForUpdate[]>>;
-
-    //
     fullEditedCarsList: ICar[];
-
-    setCarsByCompanyName: React.Dispatch<React.SetStateAction<ICar[]>>
-    setCarsByColor: React.Dispatch<React.SetStateAction<ICar[]>>
-    setCarsByModel: React.Dispatch<React.SetStateAction<ICar[]>>
-    setCarsByYear: React.Dispatch<React.SetStateAction<ICar[]>>
-    setCarsByYearLT: React.Dispatch<React.SetStateAction<ICar[]>>
-    setCarsByYearGT: React.Dispatch<React.SetStateAction<ICar[]>>
-    //
 }
 
-const Car: FC<IProps> = ({
-                             car,
-                             setEditedCars,
-                             setRemovedCars,
-
-                             //
-                             fullEditedCarsList,
-
-                             setCarsByCompanyName,
-                             setCarsByModel,
-                             setCarsByColor,
-                             setCarsByYear,
-                             setCarsByYearLT,
-                             setCarsByYearGT,
-                             //
-                         }) => {
-
+const Car: FC<IProps> = ({car, fullEditedCarsList}) => {
     const {
         car: name,
         car_model,
@@ -49,6 +23,8 @@ const Car: FC<IProps> = ({
         price,
         availability,
     } = car;
+
+    const {dispatch} = useAppReducer();
 
     const byCompanyName = async () => {
         const cars: ICar[] = localStorageService.getAddedCars().filter(ac => ac.car === name);
@@ -61,8 +37,8 @@ const Car: FC<IProps> = ({
             console.warn("AXIOS ERROR = ", response?.data);
         }
 
-        setNull();
-        setCarsByCompanyName(cars);
+        dispatch(carActions.setNull([]));
+        dispatch(carActions.setCarsByCompanyName(cars));
     }
     const byModel = async () => {
         const cars: ICar[] = localStorageService.getAddedCars().filter(ac => ac.car_model === car_model);
@@ -75,8 +51,8 @@ const Car: FC<IProps> = ({
             console.warn("AXIOS ERROR = ", response?.data);
         }
 
-        setNull();
-        setCarsByModel(cars);
+        dispatch(carActions.setNull([]));
+        dispatch(carActions.setCarsByModel(cars));
     }
     const byColor = async () => {
         const cars: ICar[] = localStorageService.getAddedCars().filter(ac => ac.car_color === car_color);
@@ -90,8 +66,8 @@ const Car: FC<IProps> = ({
             console.warn("AXIOS ERROR = ", response?.data);
         }
 
-        setNull();
-        setCarsByColor(cars);
+        dispatch(carActions.setNull([]));
+        dispatch(carActions.setCarsByColor(cars));
     }
     const byYear = async () => {
         const cars: ICar[] = localStorageService.getAddedCars().filter(ac => ac.car_model_year === car_model_year);
@@ -104,8 +80,8 @@ const Car: FC<IProps> = ({
             console.warn("AXIOS ERROR = ", response?.data);
         }
 
-        setNull();
-        setCarsByYear(cars);
+        dispatch(carActions.setNull([]));
+        dispatch(carActions.setCarsByYear(cars));
     }
     const byYearLT = async () => {
         const cars: ICar[] = localStorageService.getAddedCars().filter(ac => ac.car_model_year < car_model_year);
@@ -118,8 +94,8 @@ const Car: FC<IProps> = ({
             console.warn("AXIOS ERROR = ", response?.data);
         }
 
-        setNull();
-        setCarsByYearLT(cars);
+        dispatch(carActions.setNull([]));
+        dispatch(carActions.setCarsByYearLT(cars));
     }
     const byYearGT = async () => {
         const cars: ICar[] = localStorageService.getAddedCars().filter(ac => ac.car_model_year > car_model_year);
@@ -132,18 +108,9 @@ const Car: FC<IProps> = ({
             console.warn("AXIOS ERROR = ", response?.data);
         }
 
-        setNull();
-        setCarsByYearGT(cars);
+        dispatch(carActions.setNull([]));
+        dispatch(carActions.setCarsByYearGT(cars));
     }
-
-    const setNull = () => {
-        setCarsByCompanyName([]);
-        setCarsByModel([]);
-        setCarsByColor([]);
-        setCarsByYear([]);
-        setCarsByYearLT([]);
-        setCarsByYearGT([]);
-    };
 
     return (
         <tr className={styles.car}>
@@ -159,11 +126,7 @@ const Car: FC<IProps> = ({
             <td>{price}</td>
             <td style={{color: availability ? "green" : "red"}}>{availability ? "✓" : "✗"}</td>
 
-            <ActionsDropdown
-                car={car}
-                setEditedCars={setEditedCars}
-                setRemovedCars={setRemovedCars}
-            />
+            <ActionsDropdown car={car}/>
         </tr>
     );
 };
