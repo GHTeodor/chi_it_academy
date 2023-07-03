@@ -6,6 +6,12 @@
   padding-left: 7px;
   padding-right: 7px;
   border: double medium gray;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  word-break: break-all;
+  max-width: calc(100vw / 8);
+  box-sizing: border-box;
 
   &.click:hover, .click:hover {
     text-decoration: underline;
